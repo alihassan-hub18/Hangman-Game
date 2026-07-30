@@ -1,0 +1,106 @@
+import random
+
+# Hangman ke different stages (ASCII Art)
+HANGMAN_PICS = [
+    """
+       +---+
+           |
+           |
+           |
+          ===""",
+    """
+       +---+
+       O   |
+           |
+           |
+          ===""",
+    """
+       +---+
+       O   |
+       |   |
+           |
+          ===""",
+    """
+       +---+
+       O   |
+      /|   |
+           |
+          ===""",
+    """
+       +---+
+       O   |
+      /|\\  |
+           |
+          ===""",
+    """
+       +---+
+       O   |
+      /|\\  |
+      /    |
+          ===""",
+    """
+       +---+
+       O   |
+      /|\\  |
+      / \\  |
+          ==="""
+]
+
+def play_hangman():
+    # Words ki list jisme se random word select hoga
+    word_list = ["python", "developer", "programming", "computer", "algorithm", "coding"]
+    
+    # Random word chunna
+    secret_word = random.choice(word_list)
+    word_length = len(secret_word)
+    
+    # Game variables
+    display = ["_" for _ in range(word_length)]
+    guessed_letters = []
+    lives = 6  # Total kitni galtiyan allow hain
+    
+    print("=======================================")
+    print("   WELCOME TO ADVANCED HANGMAN GAME!   ")
+    print("=======================================")
+    
+    game_over = False
+    
+    while not game_over:
+        print(HANGMAN_PICS[6 - lives])
+        print(f"\nWord to guess: {' '.join(display)}")
+        print(f"Guessed letters: {', '.join(guessed_letters)}")
+        print(f"Lives remaining: {lives}")
+        
+        # User se input lena
+        guess = input("\nGuess a letter: ").lower()
+        
+        # Agar letter pehle hi guess kar liya ho
+        if guess in guessed_letters:
+            print(f"You have already guessed the letter '{guess}'. Try another one!")
+            continue
+            
+        guessed_letters.append(guess)
+        
+        # Check karna ke guess kiya gaya letter secret word mein hai ya nahi
+        if guess in secret_word:
+            for position in range(word_length):
+                if secret_word[position] == guess:
+                    display[position] = guess
+            print(f"Good job! '{guess}' is in the word.")
+        else:
+            lives -= 1
+            print(f"Oops! '{guess}' is not in the word. You lose a life.")
+            
+            if lives == 0:
+                print(HANGMAN_PICS[6])
+                print(f"\nGame Over! The secret word was: '{secret_word}'.")
+                game_over = True
+                
+        # Check karna ke user jeet gaya hai ya nahi
+        if "_" not in display:
+            print(f"\nCongratulations! You guessed the word: '{secret_word}' successfully! 🎉")
+            game_over = True
+
+# Run the program
+if __name__ == "__main__":
+    play_hangman()
